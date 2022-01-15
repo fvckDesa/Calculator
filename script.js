@@ -1,157 +1,94 @@
-const butt9 = document.querySelector('#num9');
-const butt8 = document.querySelector('#num8');
-const butt7 = document.querySelector('#num7');
-const butt6 = document.querySelector('#num6');
-const butt5 = document.querySelector('#num5');
-const butt4 = document.querySelector('#num4');
-const butt3 = document.querySelector('#num3');
-const butt2 = document.querySelector('#num2');
-const butt1 = document.querySelector('#num1');
-const butt0 = document.querySelector('#num0');
+const btnsNumber = document.querySelectorAll('.number');
 
-const div = document.querySelector('#div');
-const mol = document.querySelector('#mol');
-const sot = document.querySelector('#sot');
-const add = document.querySelector('#add');
-const ugu = document.querySelector('#ugu');
-const canc = document.querySelector('#can');
+const btnsOperation = document.querySelectorAll('.operationSimbol');
 
-const display = document.getElementById('h1');
+const ugu = document.querySelector("#ugu");
+const canc = document.querySelector("#can");
+const back = document.querySelector("#back");
 
-let testo = '';
+const displayOperation = document.getElementById("operation");
+const displayNum = document.getElementById("num");
 
-function printDisplay(num) {
-    testo += num;
-    display.textContent = testo;
-}
+let operationString = '';
 
-butt9.addEventListener('click', () => {
-    printDisplay('9');
-});
-butt8.addEventListener('click', () => {
-    printDisplay('8');
-});
-butt7.addEventListener('click', () => {
-    printDisplay('7');
-});
-butt6.addEventListener('click', () => {
-    printDisplay('6');
-});
-butt5.addEventListener('click', () => {
-    printDisplay('5');
-});
-butt4.addEventListener('click', () => {
-    printDisplay('4');
-});
-butt3.addEventListener('click', () => {
-    printDisplay('3');
-});
-butt2.addEventListener('click', () => {
-    printDisplay('2');
-});
-butt1.addEventListener('click', () => {
-    printDisplay('1');
-});
-butt0.addEventListener('click', () => {
-    printDisplay('0');
+btnsNumber.forEach(btn => {
+    btn.param = btn.textContent;
+    btn.addEventListener('click', print);
 });
 
+btnsOperation.forEach(btn => {
+    btn.param = btn.textContent;
+    btn.addEventListener('click', print);
+});
 
-let arrNum1 = [];
-let arrNum2 = [];
-
-function cancella() {
-    display.textContent = '0';
-    testo = '';
-    arrNum1 = [];
-    arrNum2 = [];
-}
-
-
-function operazioni(simbolo) {
-    
-    let index = testo.indexOf(simbolo);
-    for(let i = 0; i !== testo.length; i++) {
-        if(i < index && testo[i] !== simbolo){
-            arrNum1[i] = testo[i];
-        }else if(testo[i] !== simbolo) {
-            arrNum2[i] = testo[i];
-        }
+function print(e) {
+    if(checkThereIsOperator(operationString)){
+        btnsOperation.forEach(btn => {
+            btn.removeEventListener('click', print);
+        });
     }
-    arrNum2.shift();
+    operationString += e.target.param;
+    displayNum.innerText = operationString;
 }
 
-let sim;
+function checkThereIsOperator(string) {
+    return /[^0-9]/g.test(string);
+}
 
-div.addEventListener('click', () => {
-    printDisplay('÷');
-    sim = '÷';
-});
-mol.addEventListener('click', () => {
-    printDisplay('x');
-    sim = 'x';
-});
-sot.addEventListener('click', () => {
-    printDisplay('-');
-    sim = '-';
-});
-add.addEventListener('click', () => {
-    printDisplay('+');
-    sim = '+';
-});
+ugu.addEventListener('click', resolve);
 
+function resolve() {
+    let num1, num2, resulte, simbol;
 
-ugu.addEventListener('click', () => {
-    
-    let totale;
-    let num1;
-    let num2;
+    displayOperation.innerText = operationString;
 
-    switch (sim) {
-        case '÷':
-            operazioni('÷');
-            num1 = Number(arrNum1.join(''));
-            num2 = Number(arrNum2.join(''));
-            totale = num1 / num2;
-            break;
-        case 'x':
-            operazioni('x');
-            num1 = Number(arrNum1.join(''));
-            num2 = Number(arrNum2.join(''));
-            totale = num1 * num2;
+    simbol = operationString[operationString.search(/[^0-9]/g)];
+
+    let tempArr = operationString.split(/[^0-9]/g);
+
+    num1 = +tempArr[0];
+    num2 = +tempArr[1];
+
+    switch (simbol) {
+        case '+':
+            resulte = (num1 + num2).toString();
             break;
         case '-':
-            operazioni('-');
-            num1 = Number(arrNum1.join(''));
-            num2 = Number(arrNum2.join(''));
-            totale = num1 - num2;
+            resulte = (num1 - num2).toString();
+        case 'x':
+            resulte = (num1 * num2).toString();
             break;
-        
-        case '+':
-            operazioni('+');
-            num1 = Number(arrNum1.join(''));
-            num2 = Number(arrNum2.join(''));
-            totale = num1 + num2;
+        case '÷':
+            resulte = (num1 / num2).toString();
             break;
+        default:
+            resulte = operationString;
     }
-    
-    cancella();
+    clear(resulte);
+}
 
-    display.textContent = totale;
+canc.addEventListener('click', clear);
 
-})
+function clear(string = '0') {
+    operationString = '';
+    if(typeof string === 'object'){
+        displayNum.innerText = '0';
+    }else {
+        operationString = string;
+        displayNum.innerText = operationString;
+    }
+    btnsOperation.forEach(btn => {
+        btn.addEventListener('click', print);
+    });
+}
 
-canc.addEventListener('click', () => {
-    cancella();
+back.addEventListener('click', () => {
+    let shift = operationString.split('');
+    shift.pop();
+    operationString = shift.join('');
+    displayNum.innerText = operationString === '' ? '0' : operationString;
 });
 
 
-////////////
-
-const spawn = document.getElementById('spawn');
-
-spawn.addEventListener('click', () => {
-    document.body.children[1].classList.toggle('hidden');
-});
 
 

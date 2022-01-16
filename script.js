@@ -11,6 +11,8 @@ const point = document.querySelector("#point");
 const displayOperation = document.getElementById("operation");
 const displayNum = document.getElementById("num");
 
+const list = document.querySelector('.list');
+
 let operationString = "";
 
 btnsNumber.forEach((btn) => {
@@ -39,6 +41,7 @@ ugu.addEventListener("click", resolve);
 
 function resolve() {
   let num1, num2, resulte, simbol;
+  let arround = 100_000_000;
 
   displayOperation.innerText = operationString;
 
@@ -60,11 +63,18 @@ function resolve() {
       resulte = (num1 * num2).toString();
       break;
     case "÷":
-      resulte = (num1 / num2).toString();
+      resulte = (Math.floor((num1 / num2) * arround) / arround).toString();
       break;
     default:
       resulte = operationString;
   }
+
+  const listElement = document.createElement('li');
+  listElement.classList.add('list-element');
+  listElement.innerText = `operation: ${operationString ? operationString : 0} 
+  resulte: ${resulte ? resulte : 0}`;
+  list.appendChild(listElement);
+
   clear(resulte);
 }
 

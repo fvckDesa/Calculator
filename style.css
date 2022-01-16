@@ -79,6 +79,26 @@ h4{
     box-shadow: 20px 10px 10px rgba(0, 0, 0, 0.342);
 }
 
+.list {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30vw;
+    height: 100vh;
+    padding: 0;
+    background-color: black;
+    overflow-y: scroll;
+}
+
+.list-element {
+    color: white;
+    font-size: 30px;
+    text-align: start;
+    padding-left: 1rem;
+    margin-block: 0.5rem;
+}
+
 #display {
     grid-area: dis;
 }
@@ -154,5 +174,3 @@ h4{
 #back {
     grid-area: back;
 }
-
-

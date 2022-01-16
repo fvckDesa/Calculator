@@ -12,6 +12,8 @@ const displayOperation = document.getElementById("operation");
 const displayNum = document.getElementById("num");
 
 const list = document.querySelector('.list');
+const arrow = document.querySelector('.arrow');
+const trash = document.querySelector('.trash');
 
 let operationString = "";
 
@@ -105,5 +107,16 @@ point.addEventListener("click", () => {
   if (!tempArr[0].includes(".") || !tempArr[1].includes(".")) {
     operationString === "" ? (operationString += "0.") : (operationString += ".");
     displayNum.innerText = operationString;
+  }
+});
+
+arrow.addEventListener('click', () => {
+  list.classList.toggle('expand');
+  arrow.classList.toggle('move');
+});
+
+trash.addEventListener('click', () => {
+  for(let i = list.children.length - 1; list.children.length > 1; i--){
+    list.children[i].remove();
   }
 });
